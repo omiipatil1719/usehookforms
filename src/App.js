@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy, useState } from 'react'
+import { useForm } from "react-hook-form";
 
-function App() {
+
+const App = () => {
+  const [useFoemdata,setuseFormdata]=useState([])
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+  const submit = (data) => {
+    console.log(data)
+    reset({
+      name: '',
+      email: '',
+      password: ''
+    });
+    setuseFormdata([
+      ...useFoemdata,
+       data
+    ])
+  }
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <form onSubmit={handleSubmit(submit)}>
+        <div>
+          <label htmlFor='name'>Name</label>
+          <input {...register('name', { required: true, })} />
+          {errors.name ? <p style={{color:"red"}}>Name required</p> : null}
+          
+        </div>
+        <div>
+          <label htmlFor='email'>Email</label>
+          <input type='email' {...register('email',{required:true})} />
+          {errors.email ?<p style={{color:"red"}}>email required </p>:null}
+        </div>
+        <div>
+          <label htmlFor='password'>Password</label>
+          <input type='password' {...register('password',{required:true})} />
+          {errors.password?<p style={{color:"red"}}>password is required</p>:null}
+        </div>
+        
+        <br />
+        <button type='submit'>Submit</button>
+      </form>
+    </>)
 }
 
-export default App;
+export default App
